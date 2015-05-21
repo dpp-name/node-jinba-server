@@ -1,0 +1,27 @@
+{ "name" : "jinba-server"
+, "description" : "Pinba for Node.js"
+, "keywords" : ["jinba", "RUM", "pinba", "monitoring", "profiling"]
+, "homepage" : "http://sannis.github.com/node-jinba-server"
+, "version" : "0.0.1"
+, "author" :
+  { "name" : "Oleg Efimov"
+  , "email" : "efimovov@gmail.com"
+  }
+, "contributors" :
+  [ { "name" : "Oleg Efimov"
+    , "email" : "efimovov@gmail.com"
+    }
+  ]
+, "bugs" : { "url" : "https://github.com/Sannis/node-jinba-server/issues" }
+, "licenses" : [ { "type" : "MIT" } ]
+, "repository" :
+  { "type" : "git"
+  , "url" : "http://github.com/Sannis/node-jinba-server.git"
+  }
+, "main" : "./lib/jinba-server.js"
+, "engines" : { "node" : ">= 0.8.0" }
+, "dependencies" :
+  { "pinba"  : "~1.1.0"
+  , "lodash" : "~2.4.1"
+  }
+}
