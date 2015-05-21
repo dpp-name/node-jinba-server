@@ -34,7 +34,8 @@ function sendJinbaRequest(jinba_request) {
       response_text += chunk;
     });
     response.on('end', function () {
-      console.log('RESULT: ' + util.inspect(JSON.parse(response_text)));
+      console.log('RESULT: ' + response_text);
+      console.log('INSPECT: ' + util.inspect(JSON.parse(response_text), 10));
 
       console.log("");
       console.log("");
