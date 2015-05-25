@@ -46,7 +46,7 @@ function sendJinbaRequest(jinbaRequest) {
   request.end();
 }
 
-var jinba_request_not_array = {};
+var jinba_request_not_array = "{}";
 sendJinbaRequest(jinba_request_not_array);
 
 var jinba_request_wrong_request_value = [

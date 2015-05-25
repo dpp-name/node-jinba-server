@@ -7,8 +7,10 @@
  * See license text in LICENSE file
  */
 
+var http = require('http');
+
 var JinbaServer = require('../');
 
 console.log("Start listening...");
-JinbaServer.createJinbaServer(30002, '127.0.0.1', true).listen(3000, '127.0.0.1');
+http.createServer(JinbaServer.createRequestListener(30002, '127.0.0.1', true)).listen(3000, '127.0.0.1');
 console.log("Listening stared.");
