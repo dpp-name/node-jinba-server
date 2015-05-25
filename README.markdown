@@ -5,7 +5,7 @@ Node.js Jinba server
 
 -----
 
-*Node.js server that listen for [Jinba] requests, processes them and writes to [Pinba] server.*
+**Node.js server that listen for [Jinba] requests, processes them and writes to [Pinba] server.**
 
 [NPMVI]: https://badge.fury.io/js/jinba-server.png
 [NPMVURL]: http://badge.fury.io/js/jinba-server
