@@ -10,39 +10,39 @@
 var http = require("http");
 var util = require('util');
 
-function sendJinbaRequest(jinba_request) {
-  var post_data = JSON.stringify(jinba_request);
+function sendJinbaRequest(jinbaRequest) {
+  var requestData = (jinbaRequest instanceof Array) ? JSON.stringify(jinbaRequest) : jinbaRequest;
 
-  var request_options = {
+  var requestOptions = {
     hostname: '127.0.0.1',
     port: 3000,
     method: 'POST',
     headers: {
       'Content-Type': 'application/jinba',
-      'Content-Length': post_data.length
+      'Content-Length': requestData.length
     }
   };
 
-  var request = http.request(request_options, function(response) {
+  var request = http.request(requestOptions, function(response) {
     console.log('STATUS: ' + response.statusCode);
     console.log('HEADERS: ' + JSON.stringify(response.headers));
 
-    var response_text = '';
+    var responseText = '';
 
     response.setEncoding('utf8');
     response.on('data', function (chunk) {
-      response_text += chunk;
+      responseText += chunk;
     });
     response.on('end', function () {
-      console.log('RESULT: ' + response_text);
-      console.log('INSPECT: ' + util.inspect(JSON.parse(response_text), {depth: 10}));
+      console.log('RESULT: ' + responseText);
+      console.log('INSPECT: ' + util.inspect(JSON.parse(responseText), {depth: 10}));
 
       console.log("");
       console.log("");
     });
   });
 
-  request.write(post_data);
+  request.write(requestData);
   request.end();
 }
 
