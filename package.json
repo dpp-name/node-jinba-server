@@ -21,7 +21,5 @@
 , "main" : "./lib/jinba-server.js"
 , "engines" : { "node" : ">= 0.8.0" }
 , "dependencies" :
-  { "pinba"  : "~1.2.0"
-  , "lodash" : "~2.4.1"
-  }
+  { "pinba"  : "~1.2.0" }
 }
