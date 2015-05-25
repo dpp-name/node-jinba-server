@@ -1,5 +1,5 @@
 { "name" : "jinba-server"
-, "description" : "Pinba for Node.js"
+, "description" : "Node.js server that listen for Jinba requests, process them and write to Pinba"
 , "keywords" : ["jinba", "RUM", "pinba", "monitoring", "profiling"]
 , "homepage" : "http://sannis.github.com/node-jinba-server"
 , "version" : "0.2.0"
