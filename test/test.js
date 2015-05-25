@@ -229,7 +229,7 @@ describe('JinbaServer', function () {
       );
     });
 
-    it('should check for requests measurements required fileds', function (done) {
+    it('should check for requests measurements required fields', function (done) {
       assertResponseLocalError(
         done,
         [
