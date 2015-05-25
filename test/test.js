@@ -143,11 +143,11 @@ describe('JinbaServer', function () {
 
     // Local requests checks
 
-    it('should check for Jinba requests structure', function (done) {
+    it('should check for requests required fields', function (done) {
       assertResponseLocalError(done, [{}], "request.name is not set");
     });
 
-    it('should check for Jinba requests timer value', function (done) {
+    it('should check for requests timer value', function (done) {
       assertResponseLocalError(
         done,
         [
@@ -160,9 +160,37 @@ describe('JinbaServer', function () {
       );
     });
 
+    it('should check for requests tags type', function (done) {
+      assertResponseLocalError(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "tags": {}
+          }
+        ],
+        "request.tags is not array"
+      );
+    });
+
+    it('should check for requests tags required fields', function (done) {
+      assertResponseLocalError(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "tags": [{}]
+          }
+        ],
+        "request.tags[].value is not set"
+      );
+    });
+
     // Local measurements checks
 
-    it('should check for Jinba requests measurements is array', function (done) {
+    it('should check for requests measurements type', function (done) {
       assertResponseLocalError(
         done,
         [
@@ -176,7 +204,7 @@ describe('JinbaServer', function () {
       );
     });
 
-    it('should check for Jinba requests measurements structure', function (done) {
+    it('should check for requests measurements required fileds', function (done) {
       assertResponseLocalError(
         done,
         [
@@ -190,7 +218,7 @@ describe('JinbaServer', function () {
       );
     });
 
-    it('should check for Jinba requests measurements timer value', function (done) {
+    it('should check for requests measurements timer value', function (done) {
       assertResponseLocalError(
         done,
         [
@@ -206,6 +234,46 @@ describe('JinbaServer', function () {
           }
         ],
         "request.measurements[all].value is out of limits"
+      );
+    });
+
+    it('should check for requests measurements tags type', function (done) {
+      assertResponseLocalError(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "measurements": [
+              {
+                "name": "all",
+                "value": 1000000,
+                "tags": {}
+              }
+            ]
+          }
+        ],
+        "request.measurements[].tags is not array"
+      );
+    });
+
+    it('should check for requests measurements tags required fields', function (done) {
+      assertResponseLocalError(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "measurements": [
+              {
+                "name": "all",
+                "value": 1000000,
+                "tags": [{}]
+              }
+            ]
+          }
+        ],
+        "request.measurements[].tags[].value is not set"
       );
     });
   });
