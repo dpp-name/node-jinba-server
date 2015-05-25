@@ -126,10 +126,6 @@ function assertResponseSuccess(done, requestJson, expectedResponseJson) {
 }
 
 describe('JinbaServer', function () {
-  it('should export createJinbaServer() function', function () {
-    assert.ok(typeof JinbaServer.createJinbaServer === 'function');
-  });
-
   it('should export createRequestListener() function', function () {
     assert.ok(typeof JinbaServer.createRequestListener === 'function');
   });
@@ -140,7 +136,7 @@ describe('JinbaServer', function () {
     // Hooks
 
     beforeEach(function () {
-      JS = JinbaServer.createJinbaServer(30002, '127.0.0.1', true);
+      JS = http.createServer(JinbaServer.createRequestListener(30002, '127.0.0.1', true));
       JS.listen(3000, '127.0.0.1');
     });
 
