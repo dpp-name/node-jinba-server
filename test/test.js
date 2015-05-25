@@ -12,7 +12,10 @@
 var assert = require("assert");
 var http = require("http");
 
+var sinon = require("sinon");
+
 var JinbaServer = require(process.env.LIB_COV ? '../lib-cov/jinba-server' : '../lib/jinba-server');
+var PinbaRequest = require('pinba').Request;
 
 function testJinbaRequestResponse(jinbaRequest, onResponseEnd) {
   var requestData = (jinbaRequest instanceof Array) ? JSON.stringify(jinbaRequest) : jinbaRequest;
@@ -101,6 +104,8 @@ function assertResponseLocalError(done, requestJson, expectedErrorSubstring) {
 }
 
 function assertResponseSuccess(done, requestJson, expectedResponseJson) {
+  var pr_flush_stub = sinon.stub(PinbaRequest.prototype, "flush");
+
   assertResponse(
     requestJson,
     function (responseText, responseJson) {
@@ -110,6 +115,10 @@ function assertResponseSuccess(done, requestJson, expectedResponseJson) {
       );
 
       assert.deepEqual(expectedResponseJson, responseJson[0]);
+
+      assert.ok(pr_flush_stub.calledOnce);
+
+      PinbaRequest.prototype.flush.restore();
 
       done();
     }

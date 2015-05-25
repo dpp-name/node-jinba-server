@@ -25,6 +25,7 @@
   { "pinba"  : "~1.2.0" }
 , "devDependencies" :
   { "mocha"  : "~2.2.5"
+  , "sinon"  : "~1.14.1"
   , "jshint" : "~2.7.0"
   , "ndoc"   : "~3.1.0"
   }
