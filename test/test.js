@@ -57,7 +57,7 @@ function assertResponse(requestJson, onResponseJson) {
   });
 }
 
-function assertResponseGlobalError(requestJson, expectedErrorSubstring) {
+function assertResponseGlobalError(done, requestJson, expectedErrorSubstring) {
   assertResponse(
     requestJson,
     function (responseText, responseJson) {
@@ -70,11 +70,13 @@ function assertResponseGlobalError(requestJson, expectedErrorSubstring) {
         responseJson.error.indexOf(expectedErrorSubstring) !== -1,
         "Response error description '" + responseJson.error + "' does not contains substring '" + expectedErrorSubstring + "'"
       );
+
+      done();
     }
   );
 }
 
-function assertResponseLocalError(requestJson, expectedErrorSubstring) {
+function assertResponseLocalError(done, requestJson, expectedErrorSubstring) {
   assertResponse(
     requestJson,
     function (responseText, responseJson) {
@@ -92,6 +94,8 @@ function assertResponseLocalError(requestJson, expectedErrorSubstring) {
         responseJson[0].error.indexOf(expectedErrorSubstring) !== -1,
         "Response error description '" + responseJson[0].error + "' does not contains substring '" + expectedErrorSubstring + "'"
       );
+
+      done();
     }
   );
 }
@@ -108,6 +112,8 @@ describe('JinbaServer', function () {
   describe('RequestListener', function () {
     var JS;
 
+    // Hooks
+
     beforeEach(function () {
       JS = JinbaServer.createJinbaServer(30002, '127.0.0.1', true);
       JS.listen(3000, '127.0.0.1');
@@ -117,28 +123,33 @@ describe('JinbaServer', function () {
       JS.close(done);
     });
 
-    it('should check for empty POST data', function () {
-      assertResponseGlobalError("", "Empty POST data");
+    // Global request checks
+
+    it('should check for empty POST data', function (done) {
+      assertResponseGlobalError(done, "", "Empty POST data");
     });
 
-    it('should check for broken JSON', function () {
-      assertResponseGlobalError("[}", "Cannot parse incoming JSON");
+    it('should check for broken JSON', function (done) {
+      assertResponseGlobalError(done, "[}", "Cannot parse incoming JSON");
     });
 
-    it('should check for wring JSON', function () {
-      assertResponseGlobalError("{}", "Incoming JSON is not array");
+    it('should check for wring JSON', function (done) {
+      assertResponseGlobalError(done, "{}", "Incoming JSON is not array");
     });
 
-    it('should check for empty JSON', function () {
-      assertResponseGlobalError("[]", "Incoming JSON is empty");
+    it('should check for empty JSON', function (done) {
+      assertResponseGlobalError(done, "[]", "Incoming JSON is empty");
     });
 
-    it('should check for Jinba requests structure', function () {
-      assertResponseLocalError([{}], "request.name is not set");
+    // Local requests checks
+
+    it('should check for Jinba requests structure', function (done) {
+      assertResponseLocalError(done, [{}], "request.name is not set");
     });
 
-    it('should check for Jinba requests timer values', function () {
+    it('should check for Jinba requests timer value', function (done) {
       assertResponseLocalError(
+        done,
         [
           {
             "name": "/",
@@ -146,6 +157,55 @@ describe('JinbaServer', function () {
           }
         ],
         "request.value is out of limits"
+      );
+    });
+
+    // Local measurements checks
+
+    it('should check for Jinba requests measurements is array', function (done) {
+      assertResponseLocalError(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "measurements": {}
+          }
+        ],
+        "request.measurements is not array"
+      );
+    });
+
+    it('should check for Jinba requests measurements structure', function (done) {
+      assertResponseLocalError(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "measurements": [{}]
+          }
+        ],
+        "request.measurements[].value is not set"
+      );
+    });
+
+    it('should check for Jinba requests measurements timer value', function (done) {
+      assertResponseLocalError(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "measurements": [
+              {
+                "name": "all",
+                "value": 1000000000
+              }
+            ]
+          }
+        ],
+        "request.measurements[all].value is out of limits"
       );
     });
   });
