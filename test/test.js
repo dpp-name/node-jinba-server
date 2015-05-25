@@ -100,6 +100,22 @@ function assertResponseLocalError(done, requestJson, expectedErrorSubstring) {
   );
 }
 
+function assertResponseSuccess(done, requestJson, expectedResponseJson) {
+  assertResponse(
+    requestJson,
+    function (responseText, responseJson) {
+      assert.ok(
+        (responseJson instanceof Array) && (responseJson.length == 1),
+        "Response should be an array with one object inside: " + responseText
+      );
+
+      assert.deepEqual(expectedResponseJson, responseJson[0]);
+
+      done();
+    }
+  );
+}
+
 describe('JinbaServer', function () {
   it('should export createJinbaServer() function', function () {
     assert.ok(typeof JinbaServer.createJinbaServer === 'function');
@@ -274,6 +290,60 @@ describe('JinbaServer', function () {
           }
         ],
         "request.measurements[].tags[].value is not set"
+      );
+    });
+
+    it('should process requests and send them to Pinba', function (done) {
+      assertResponseSuccess(
+        done,
+        [
+          {
+            "name": "/",
+            "value": 1000000,
+            "tags": [
+              {
+                "name": "scheme",
+                "value": "HTTPS"
+              }
+            ],
+            "measurements": [
+              {
+                "name": "all",
+                "value": 1000000,
+                "tags": [
+                  {
+                    "name": "some",
+                    "value": "thing"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        {
+          "hostname": 'unknown',
+          "server_name": 'unknown',
+          "script_name": '/',
+          "schema": "unknown",
+          "req_count": 1,
+          "req_time": 1000,
+          "ru_utime": 0,
+          "ru_stime": 0,
+          "timers": [
+            {
+              "value": 1000,
+              "started": false,
+              "tags": {
+                "group": "all",
+                "scheme": "HTTPS",
+                "some": "thing"
+              }
+            }
+          ],
+          "tags": {
+            "scheme": "HTTPS"
+          }
+        }
       );
     });
   });
