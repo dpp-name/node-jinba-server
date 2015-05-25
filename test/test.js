@@ -165,7 +165,7 @@ describe('JinbaServer', function () {
     // Local requests checks
 
     it('should check for requests required fields', function (done) {
-      assertResponseLocalError(done, [{}], "request.name is not set");
+      assertResponseLocalError(done, [{}], "request.value is not set");
     });
 
     it('should check for requests timer value', function (done) {
